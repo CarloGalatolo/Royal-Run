@@ -1,0 +1,81 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Chunk : MonoBehaviour
+{
+	// Params
+	[SerializeField] GameObject fencePrefab;
+	[SerializeField] GameObject applePrefab;
+	[SerializeField] GameObject coinPrefab;
+	[SerializeField] float[] lanes = {-2.5f, 0, 2.5f};
+	[SerializeField] float appleSpawnChance = 0.3f;
+	[SerializeField] float coinSpawnChance = 0.5f;
+
+	// State
+	readonly List<int> availableLanes = new List<int> {0, 1, 2};
+
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        SpawnFences();
+		SpawnApple();
+		SpawnCoins();
+    }
+
+	// Update is called once per frame
+	void Update()
+    {
+        
+    }
+
+
+	int SelectLane ()
+	{
+		int randomLaneIndex = Random.Range(0, availableLanes.Count);
+		int selectedLane = availableLanes[randomLaneIndex];
+		availableLanes.RemoveAt(randomLaneIndex);
+		return selectedLane;
+	}
+
+
+	void SpawnFences ()
+	{
+		int fencesToSpawn = Random.Range(0, lanes.Length);
+
+		for (int i = 0; i < fencesToSpawn; i++)
+		{
+			if (availableLanes.Count <= 0) break;
+			Instantiate(fencePrefab, FindSpawnPosition(), Quaternion.identity, this.transform);
+		}
+	}
+
+	private Vector3 FindSpawnPosition ()
+	{
+		return new Vector3(lanes[SelectLane()], transform.position.y, transform.position.z);
+	}
+
+	void SpawnApple ()
+	{
+		if (Random.value > appleSpawnChance) return;
+		if (availableLanes.Count <= 0) return;
+
+		Instantiate(applePrefab, FindSpawnPosition(), Quaternion.identity, this.transform);
+	}
+
+
+	void SpawnCoins ()
+	{
+		if (Random.value > coinSpawnChance) return;
+		if (availableLanes.Count <= 0) return;
+
+		int coinsToSpawn = Random.Range(1, 6); // 1 to 5 inclusive;
+		Vector3 spawnPosition = FindSpawnPosition();
+
+		for (int i = 0; i < coinsToSpawn; i++)
+		{
+			Instantiate(coinPrefab, spawnPosition - (2 * (i-2) * transform.forward), Quaternion.identity, this.transform);
+		}
+	}
+}
