@@ -59,13 +59,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2119828470787476965, guid: 2b8361c7f6126214c9cb9a2aede2178b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4502551790477431852}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7602310652169182990, guid: 2b8361c7f6126214c9cb9a2aede2178b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3844889808641288052}
   m_SourcePrefab: {fileID: 100100000, guid: 2b8361c7f6126214c9cb9a2aede2178b, type: 3}
 --- !u!4 &4050595179958459696 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2119828470787476965, guid: 2b8361c7f6126214c9cb9a2aede2178b, type: 3}
   m_PrefabInstance: {fileID: 2692517169578201301}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5538701158592221147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7602310652169182990, guid: 2b8361c7f6126214c9cb9a2aede2178b, type: 3}
+  m_PrefabInstance: {fileID: 2692517169578201301}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3844889808641288052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5538701158592221147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcda79055b89021459f34d3991c75963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6818802690306671328
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89,6 +109,10 @@ PrefabInstance:
     - target: {fileID: 6979741681050572492, guid: ab7079beca09c4a45a24d22df07e346f, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979741681050572492, guid: ab7079beca09c4a45a24d22df07e346f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6979741681050572492, guid: ab7079beca09c4a45a24d22df07e346f, type: 3}
       propertyPath: m_LocalRotation.w

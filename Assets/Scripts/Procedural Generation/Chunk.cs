@@ -11,6 +11,10 @@ public class Chunk : MonoBehaviour
 	[SerializeField] float appleSpawnChance = 0.3f;
 	[SerializeField] float coinSpawnChance = 0.5f;
 
+	// Cache
+	LevelGenerator levelGenerator;
+	ScoreManager scoreManager;
+
 	// State
 	readonly List<int> availableLanes = new List<int> {0, 1, 2};
 
@@ -24,11 +28,12 @@ public class Chunk : MonoBehaviour
 		SpawnCoins();
     }
 
-	// Update is called once per frame
-	void Update()
-    {
-        
-    }
+
+	public void Init (LevelGenerator levelGenerator, ScoreManager scoreManager)
+	{
+		this.levelGenerator = levelGenerator;
+		this.scoreManager = scoreManager;
+	}
 
 
 	int SelectLane ()
@@ -51,17 +56,21 @@ public class Chunk : MonoBehaviour
 		}
 	}
 
+
 	private Vector3 FindSpawnPosition ()
 	{
 		return new Vector3(lanes[SelectLane()], transform.position.y, transform.position.z);
 	}
+
 
 	void SpawnApple ()
 	{
 		if (Random.value > appleSpawnChance) return;
 		if (availableLanes.Count <= 0) return;
 
-		Instantiate(applePrefab, FindSpawnPosition(), Quaternion.identity, this.transform);
+		GameObject newAppleGO = Instantiate(applePrefab, FindSpawnPosition(), Quaternion.identity, this.transform);
+		Apple newApple = newAppleGO.GetComponent<Apple>();
+		newApple.Init(levelGenerator);
 	}
 
 
@@ -75,7 +84,9 @@ public class Chunk : MonoBehaviour
 
 		for (int i = 0; i < coinsToSpawn; i++)
 		{
-			Instantiate(coinPrefab, spawnPosition - (2 * (i-2) * transform.forward), Quaternion.identity, this.transform);
+			GameObject newCoinGO = Instantiate(coinPrefab, spawnPosition - (2 * (i-2) * transform.forward), Quaternion.identity, this.transform);
+			Coin newCoin = newCoinGO.GetComponent<Coin>();
+			newCoin.Init(scoreManager);
 		}
 	}
 }

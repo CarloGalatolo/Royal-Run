@@ -4,14 +4,26 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
 	// Params
-	[SerializeField] GameObject chunkPrefab;
+	[Header("References")]
+	[SerializeField] GameObject[] chunkPrefabs;
+	[SerializeField] GameObject checkpointChunkPrefab;
 	[SerializeField] Transform chunkParent;
+	[SerializeField] CameraController cameraController;
+	[SerializeField] GameManager gameManager;
+	[SerializeField] ScoreManager scoreManager;
+
+	[Header("Level Settings")]
 	[SerializeField] int startingChunksAmount = 12;
+	[Tooltip("Do not chunk length value unless chink prefab size reflects that change.")]
 	[SerializeField] float chunkLength = 10;
 	[SerializeField] float moveSpeed = 8;
+	[SerializeField] float minSpeed = 2;
+	[SerializeField] float maxSpeed = 20;
+	[SerializeField] uint checkpointInterval = 8;
 
 	// State
 	readonly List<GameObject> chunks = new List<GameObject>();
+	uint chunksSpawned = 0;
 	
 
 
@@ -35,6 +47,19 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
+	GameObject ChooseChunkToSpawn ()
+	{
+		if (chunksSpawned % checkpointInterval == 0)
+		{
+			return checkpointChunkPrefab;
+		}
+		else
+		{
+			return chunkPrefabs[Random.Range(0, chunkPrefabs.Length)];
+		}
+	}
+
+
 	Vector3 FindChunkSpawnPosition ()
 	{
 		if ( chunks.Count == 0 )
@@ -46,12 +71,6 @@ public class LevelGenerator : MonoBehaviour
 			return new Vector3(0, 0, chunks[^1].transform.position.z + chunkLength);	// Last element of the list, same as chunks.Count - 1.
 		}
 		// return new Vector3(0, 0, chunks.Count == 0 ? transform.position.z : chunks[^1].transform.position.z + chunkLength );	// Shorter but less readable version.
-	}
-
-
-	void SpawnChunk ()
-	{
-		chunks.Add( Instantiate(chunkPrefab, FindChunkSpawnPosition(), Quaternion.identity, chunkParent) );
 	}
 
 
@@ -73,5 +92,34 @@ public class LevelGenerator : MonoBehaviour
 				SpawnChunk();
 			}
 		}
+	}
+
+
+	/// <summary>
+	/// This should only apply the change if the new amount is bound within range.
+	/// I.e. if the old value is an edge of the range, the change should not occur and the value should be reverted.
+	/// </summary>
+	/// <param name="amount"></param>
+	public void ChangeChunkSpeed (float amount)
+	{
+		moveSpeed += amount;
+
+		if (moveSpeed > minSpeed && moveSpeed < maxSpeed)	// Check it's in range.
+		{
+			Physics.gravity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z - amount);
+			cameraController.ChangeFOV(amount);
+		}
+
+		moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);	// If not in range, clamp to range.
+	}
+
+
+	void SpawnChunk ()
+	{
+		chunksSpawned++;
+	
+		GameObject newChunk = Instantiate(ChooseChunkToSpawn(), FindChunkSpawnPosition(), Quaternion.identity, chunkParent);
+		chunks.Add(newChunk);
+		newChunk.GetComponent<Chunk>().Init(this, scoreManager);
 	}
 }
