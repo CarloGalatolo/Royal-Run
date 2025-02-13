@@ -30,7 +30,7 @@ public abstract class Pickup : MonoBehaviour
 		else
 		{
 			// Debug tag comparison.
-			Debug.Log(other.gameObject.name + " triggering this is not Player.");
+			// Debug.Log(other.gameObject.name + " triggering this is not Player.");
 		}
 	}
 }

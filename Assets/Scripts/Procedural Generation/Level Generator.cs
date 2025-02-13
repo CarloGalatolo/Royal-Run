@@ -106,11 +106,13 @@ public class LevelGenerator : MonoBehaviour
 
 		if (moveSpeed > minSpeed && moveSpeed < maxSpeed)	// Check it's in range.
 		{
-			Physics.gravity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z - amount);
+			Physics.gravity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z - amount * 0.8f);
 			cameraController.ChangeFOV(amount);
 		}
 
 		moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);	// If not in range, clamp to range.
+		// Debug.Log($"New moveSpeed = {moveSpeed}");
+		// Debug.Log($"New gravity = {Physics.gravity.z}");
 	}
 
 

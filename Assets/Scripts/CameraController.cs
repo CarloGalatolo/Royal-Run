@@ -30,6 +30,8 @@ public class CameraController : MonoBehaviour
 		{
 			speedupParticleSystem.Play();
 		}
+
+		// Debug.Log($"New FOV = {cinemachineCamera.Lens.FieldOfView}");
 	}
 
 
