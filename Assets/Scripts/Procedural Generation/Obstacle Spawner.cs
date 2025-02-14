@@ -8,6 +8,7 @@ public class ObstacleSpawner : MonoBehaviour
 	[SerializeField] GameObject[] obstaclePrefabs;
 	[SerializeField] Transform obstacleParent;
 	[SerializeField] float obstacleSpawnTime = 1;
+	[SerializeField] float minObstacleSpawnTime = 0.1f;
 	[SerializeField] float spawnWidth = 4;
 
 	// State
@@ -18,12 +19,6 @@ public class ObstacleSpawner : MonoBehaviour
     void Start()
     {
 			StartCoroutine(SpawnObstacleRoutine());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
 
@@ -37,5 +32,12 @@ public class ObstacleSpawner : MonoBehaviour
 			Instantiate(obstaclePrefab, spawnPosition, Random.rotation, obstacleParent);
 			obstacleSpawned++;
 		}
+	}
+
+
+	public void DecreaseSpawnTime (float amount)
+	{
+		obstacleSpawnTime -= amount;
+		obstacleSpawnTime = Mathf.Max(obstacleSpawnTime, minObstacleSpawnTime);
 	}
 }

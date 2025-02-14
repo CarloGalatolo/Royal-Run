@@ -6,9 +6,11 @@ public class Checkpoint : MonoBehaviour
 	// Params
 	[SerializeField] TMP_Text signText;
 	[SerializeField] float bonusTime = 30;
+	[SerializeField] float obstacleDecreaseTimeAmount = 0.1f;
 
 	// Cache
 	GameManager gameManager;
+	ObstacleSpawner obstacleSpawner;
 
 	// Consts
 	const string PLAYER_TAG = "Player";
@@ -18,6 +20,7 @@ public class Checkpoint : MonoBehaviour
 	void Start()
 	{
 		gameManager = FindFirstObjectByType<GameManager>();
+		obstacleSpawner = FindFirstObjectByType<ObstacleSpawner>();
 		signText.text = "+" + bonusTime;
 	}
 
@@ -27,6 +30,7 @@ public class Checkpoint : MonoBehaviour
 		if (other.gameObject.CompareTag(PLAYER_TAG))
 		{
 			gameManager.AddTime(bonusTime);
+			obstacleSpawner.DecreaseSpawnTime(obstacleDecreaseTimeAmount);
 		}
 	}
 }
